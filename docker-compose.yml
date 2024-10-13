@@ -1,13 +1,32 @@
-version: '3.8'
-
 services:
+
   backend:
     build:
-      context: ./backend        
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - '8000:8000'
     volumes:
       - ./backend:/recruitment_task/backend
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    depends_on:
+      - redis
+      - celery 
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/recruitment_task/backend
+    command: celery -A backend worker --loglevel=info
+    depends_on:
+      - redis
     restart: always

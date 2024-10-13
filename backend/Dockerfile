@@ -8,7 +8,7 @@ WORKDIR /recruitment_task/backend
 COPY requirements.txt /recruitment_task/backend
 RUN pip3 install -r requirements.txt
 
-COPY .  /recruitment_task/backend
+COPY . /recruitment_task/backend
 
 EXPOSE 8000
 

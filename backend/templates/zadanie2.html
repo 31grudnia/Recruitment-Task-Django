@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex justify-center mt-10">
+    <div class="w-full max-w-xs">
+        <form id="pesel-form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="pesel">
+                    PESEL
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="pesel" type="text" name="pesel" placeholder="Enter PESEL" required>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Submit
+                </button>
+            </div>
+        </form>
+        <div id="response-message" class="mt-4"></div>
+    </div>
+</div>
+
+<script>
+document.getElementById('pesel-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const pesel = document.getElementById('pesel').value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    fetch("{% url 'check-pesel' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify({ pesel: pesel })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const responseMessage = document.getElementById('response-message');
+
+        responseMessage.innerHTML = '';
+
+        if (data.error) {
+            responseMessage.innerHTML = `<div class="text-red-500 font-bold">${data.error}</div>`;
+        } else {
+            responseMessage.innerHTML = `
+                <div class="text-green-500 font-bold">PESEL is valid!</div>
+                <p>Birthdate: ${data.birthdate}</p>
+                <p>Sex: ${data.sex}</p>
+            `;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
+{% endblock content %}

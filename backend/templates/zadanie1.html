@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-8 flex flex-col items-center">
+    <h1 class="font-medium leading-tight text-4xl mt-0 mb-4 text-blue-600">Zadanie 1</h1>
+
+    <form class="flex flex-col space-y-6" action="{% url 'upload-file-page' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="block">
+            <span class="sr-only">Choose txt file</span>
+            <input type="file" name="file" accept=".txt"
+                class="block w-full text-sm text-slate-500
+                       file:mr-4 file:py-2 file:px-4
+                       file:rounded-full file:border-0
+                       file:text-sm file:font-semibold
+                       file:bg-blue-50 file:text-blue-700
+                       hover:file:bg-blue-100" required>
+        </label>
+
+        <input type="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" />
+    </form>
+</div>
+{% endblock %}

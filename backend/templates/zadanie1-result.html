@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-8 flex flex-col items-center">
+    <h1 class="font-medium leading-tight text-4xl mt-0 mb-4 text-blue-600">Shuffled Text</h1>
+    
+    {% if error %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Error: </strong>
+            <span class="block sm:inline">{{ error }}</span>
+        </div>
+    {% else %}
+        <div class="bg-gray-100 p-4 rounded-lg w-full">
+            <p>{{ shuffled_text }}</p>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'upload-page' %}" class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Upload Another File</a>
+</div>
+{% endblock %}
